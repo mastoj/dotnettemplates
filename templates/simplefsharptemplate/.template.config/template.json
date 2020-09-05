@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Tomas Jansson",
+    "classifications": [ "Common", "Console", "WebApi", "F#" ],
+    "identity": "Mastoj.Templates.SimpleFSharp",
+    "name": "Simple solution structure for F#",
+    "shortName": "Simplefsharp",
+    "tags": {
+        "language": "F#",
+        "type": "project"
+    },
+    "sources": [
+        {
+            "modifiers": [
+                {
+                    "exclude": [ ".ionide/**", ".fake/**" ]
+                }
+            ]
+        }
+    ],
+    "sourceName": "Simplefsharp"
+}

@@ -1,0 +1,17 @@
+
+.fake
+.ionide
+bin
+obj
+.vscode
+packages
+paket-files
+.paket
+
+.build/
+.tmp/
+.fake_*/
+
+kubeconfig.yaml
+kubeconfig
+dev.env
