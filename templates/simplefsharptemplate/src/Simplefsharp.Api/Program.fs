@@ -1,27 +1,71 @@
-namespace Simplefsharp.Api
+﻿open Saturn
+open Giraffe
+open FSharp.Control.Tasks.ContextInsensitive
 
-open System
-open System.Collections.Generic
-open System.IO
-open System.Linq
-open System.Threading.Tasks
-open Microsoft.AspNetCore
-open Microsoft.AspNetCore.Hosting
-open Microsoft.Extensions.Configuration
-open Microsoft.Extensions.Hosting
-open Microsoft.Extensions.Logging
+module TodosApi =
+    type CreateTodo = {
+        Title: string
+    }
 
-module Program =
-    let exitCode = 0
+(*
+POST http://localhost:5000/api/todos/
+Content-Type: application/json
 
-    let CreateHostBuilder args =
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(fun webBuilder ->
-                webBuilder.UseStartup<Startup>() |> ignore
-            )
+{
+    title: "yolo"
+}
+*)
 
-    [<EntryPoint>]
-    let main args =
-        CreateHostBuilder(args).Build().Run()
+    let createTodo ctx = task {
+        let! input = Controller.getModel<CreateTodo> ctx
+        return! Controller.json ctx input 
+    }
 
-        exitCode
+(*
+GET http://localhost:5000/api/todos/123
+*)
+    let showTodo ctx (id: string) = task {
+        return! Controller.json ctx {|Title = "Hello"; Id = id |}
+    }
+
+(*
+GET http://localhost:5000/api/todos/
+*)
+    let showAllTodos ctx = task {
+        return! Controller.json ctx [{|Title = "Hello"; Id = "yolo world" |}]
+    }
+
+(*
+POST http://localhost:5000/api/todos/21123
+Content-Type: application/json
+
+{
+    title: "yolo"
+}
+*)
+    let updateTodo ctx (id: string) = task {
+        let! input = Controller.getModel<CreateTodo> ctx
+        return! Controller.json ctx input 
+    }
+
+    let controller = controller {
+        index showAllTodos
+        create createTodo
+        show showTodo
+        update updateTodo
+    }
+
+
+let apiRouter =
+    router {
+        forward "/todos" TodosApi.controller
+    }
+
+let app = application {
+    use_router (router {
+        forward "/api" apiRouter
+        get "/" (text "Hello from root")
+    })
+}
+
+run app

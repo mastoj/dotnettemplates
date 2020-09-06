@@ -1,0 +1,1 @@
+dotnet watch --project .\src\Simplefsharp.Api\Simplefsharp.Api.fsproj run
